@@ -1,0 +1,16 @@
+{
+    "name": "CometPeak.SerializableKrakenIoc.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1b9dd0f6d9b38ea42985b942d899fb0d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
