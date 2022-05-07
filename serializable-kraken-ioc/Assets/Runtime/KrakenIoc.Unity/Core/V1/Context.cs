@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CometPeak.SerializableKrakenIoc
-{
-    public class Context : MonoBehaviour, IContext
-    {
+namespace CometPeak.SerializableKrakenIoc {
+    public class Context : MonoBehaviour, IContext {
         public static event Action<Context> Initialized;
         public static event Action<Context> Destroyed;
 
@@ -14,40 +12,32 @@ namespace CometPeak.SerializableKrakenIoc
 
         public IContainer Container { get; private set; }
 
-        public static IContext GetContext(Type contextType)
-        {
-            if (ContextInstances.ContainsKey(contextType))
-            {
+        public static IContext GetContext(Type contextType) {
+            if (ContextInstances.ContainsKey(contextType)) {
                 return ContextInstances[contextType];
             }
 
             return null;
         }
 
-        public static T GetContext<T>() where T : IContext
-        {
+        public static T GetContext<T>() where T : IContext {
             // Check for exact type...
-            if (ContextInstances.ContainsKey(typeof(T)))
-            {
-                return (T)ContextInstances[typeof(T)];
+            if (ContextInstances.ContainsKey(typeof(T))) {
+                return (T) ContextInstances[typeof(T)];
             }
 
             // Check child types...
-            foreach(var pair in ContextInstances)
-            {
-                if(typeof(T).IsAssignableFrom(pair.Key))
-                {
-                    return (T)pair.Value;
+            foreach (var pair in ContextInstances) {
+                if (typeof(T).IsAssignableFrom(pair.Key)) {
+                    return (T) pair.Value;
                 }
             }
 
             return default(T);
         }
 
-        protected void Awake()
-        {
-            if (!ContextInstances.ContainsKey(GetType()))
-            {
+        protected void Awake() {
+            if (!ContextInstances.ContainsKey(GetType())) {
                 Container = new Container();
                 Container.Injector = new UnityInjector(Container);
                 Container.Injector.LogHandler = Debug.LogErrorFormat;
@@ -60,20 +50,16 @@ namespace CometPeak.SerializableKrakenIoc
                 OnSetupBindings();
 
                 Initialized?.Invoke(this);
-            }
-            else
-            {
+            } else {
                 throw new Exception("Duplicate key exists for Context type: " + GetType());
             }
         }
 
-        protected virtual void Start()
-        {
+        protected virtual void Start() {
             OnStart();
         }
 
-        protected void OnDestroy()
-        {
+        protected void OnDestroy() {
             Destroyed?.Invoke(this);
 
             this.OnDestroyed();
@@ -85,31 +71,24 @@ namespace CometPeak.SerializableKrakenIoc
             GC.Collect();
         }
 
-        protected virtual void OnSetupBindings()
-        {
+        protected virtual void OnSetupBindings() {
 
         }
 
-        protected virtual void OnStart()
-        {
+        protected virtual void OnStart() {
 
         }
 
-        protected virtual void OnDestroyed()
-        {
+        protected virtual void OnDestroyed() {
 
         }
 
-        public void Inherit<T>() where T : IContext
-        {
+        public void Inherit<T>() where T : IContext {
             IContext context = GetContext<T>();
 
-            if(context != null)
-            {
+            if (context != null) {
                 Container.Inherit(context.Container);
-            }
-            else
-            {
+            } else {
                 throw new NullReferenceException("Context instance doesn't exist for Context to Inherit: " + typeof(T));
             }
         }

@@ -3,25 +3,19 @@ using System;
 using System.Reflection;
 using UnityEngine;
 
-namespace CometPeak.SerializableKrakenIoc
-{
-    public class UnityInjector : Injector, IUnityInjector
-    {
-        public UnityInjector(IContainer container) : base(container)
-        {
+namespace CometPeak.SerializableKrakenIoc {
+    public class UnityInjector : Injector, IUnityInjector {
+        public UnityInjector(IContainer container) : base(container) {
         }
 
-        public override object Resolve(Type type, object target)
-        {
+        public override object Resolve(Type type, object target) {
             return Resolve(type, target, null);
         }
-        
-        public override object Resolve(Type type, object target, IInjectContext injectContext)
-        {
-            GameObject gameObject = (GameObject)target;
 
-            if (type.IsInterface)
-            {
+        public override object Resolve(Type type, object target, IInjectContext injectContext) {
+            GameObject gameObject = (GameObject) target;
+
+            if (type.IsInterface) {
                 LogHandler?.Invoke("Injector: Trying to resolve an interface instead of a concrete type! : {0} ", type);
 
                 return null;
@@ -32,8 +26,7 @@ namespace CometPeak.SerializableKrakenIoc
             // Ensure cached reflection...
             PreInjectReflection(type);
 
-            if (_cachedMethodConstructor.ContainsKey(type) && _cachedMethodConstructor[type] != null)
-            {
+            if (_cachedMethodConstructor.ContainsKey(type) && _cachedMethodConstructor[type] != null) {
                 // Include additional dependencies: GameObject target, Container...
                 object instance = ExecuteStaticMethodConstructor(_container, injectContext, _cachedMethodConstructor[type], type, target, _container);
 
@@ -47,13 +40,11 @@ namespace CometPeak.SerializableKrakenIoc
             return gameObject.AddComponent(type);
         }
 
-        protected override bool IsRootType(Type type)
-        {
+        protected override bool IsRootType(Type type) {
             return base.IsRootType(type) || type == typeof(MonoBehaviour);
         }
 
-        protected override bool MightHaveInjectAttribute(MemberInfo memberInfo)
-        {
+        protected override bool MightHaveInjectAttribute(MemberInfo memberInfo) {
             var declaringType = memberInfo.DeclaringType;
 
             return declaringType != typeof(MonoBehaviour)
@@ -63,23 +54,18 @@ namespace CometPeak.SerializableKrakenIoc
                 && declaringType != typeof(object);
         }
 
-        public void InjectGameObject(GameObject gameObject, bool recurseChildren = false)
-        {
+        public void InjectGameObject(GameObject gameObject, bool recurseChildren = false) {
             Component[] components = gameObject.GetComponents<Component>();
 
-            foreach (Component component in components)
-            {
-                if (component != null)
-                {
+            foreach (Component component in components) {
+                if (component != null) {
                     // Inject component...
                     Inject(component);
                 }
             }
 
-            if (recurseChildren)
-            {
-                for (int i = 0; i < gameObject.transform.childCount; i++)
-                {
+            if (recurseChildren) {
+                for (int i = 0; i < gameObject.transform.childCount; i++) {
                     // Recurse each child...
                     InjectGameObject(gameObject.transform.GetChild(i).gameObject, true);
                 }

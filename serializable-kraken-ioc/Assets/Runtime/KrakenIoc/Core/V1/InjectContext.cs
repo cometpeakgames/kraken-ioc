@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using CometPeak.SerializableKrakenIoc.Interfaces;
 
-namespace CometPeak.SerializableKrakenIoc
-{
+namespace CometPeak.SerializableKrakenIoc {
     /// <summary>
     /// Represents additional data passed when injecting into property, field, method or constructor
     /// </summary>
-    public class InjectContext : IInjectContext
-    {
+    public class InjectContext : IInjectContext {
         /// <summary>
         /// Container being used for an injection
         /// </summary>
         public IContainer Container { get; set; }
-        
+
         /// <summary>
         /// Type that is declaring injected field, property or method
         /// </summary>
@@ -24,16 +22,14 @@ namespace CometPeak.SerializableKrakenIoc
         /// </summary>
         public IInjectContext ParentContext { get; set; }
 
-        public InjectContext(IContainer container, Type declaringType, IInjectContext parentContext)
-        {
+        public InjectContext(IContainer container, Type declaringType, IInjectContext parentContext) {
             Container = container;
             DeclaringType = declaringType;
             ParentContext = parentContext;
-        }       
+        }
 
         public InjectContext(IContainer container, Type declaringType)
-            : this(container, declaringType, null)
-        {
+            : this(container, declaringType, null) {
         }
     }
 }

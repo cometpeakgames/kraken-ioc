@@ -1,15 +1,13 @@
 ﻿using System;
 
-namespace CometPeak.SerializableKrakenIoc.Interfaces
-{
+namespace CometPeak.SerializableKrakenIoc.Interfaces {
     public delegate void LogHandler(string format, params object[] args);
 
     /// <summary>
     /// An injector is responsible for resolving and 
     /// mitigating recursive injection issues.
     /// </summary>
-    public interface IInjector
-    {
+    public interface IInjector {
         LogHandler LogHandler { get; set; }
 
         object Resolve(Type type);

@@ -1,7 +1,5 @@
-﻿namespace CometPeak.SerializableKrakenIoc
-{
-    public enum BindingType
-    {
+﻿namespace CometPeak.SerializableKrakenIoc {
+    public enum BindingType {
         /// <summary>
         /// A single-instance / singleton of a type.
         /// </summary>

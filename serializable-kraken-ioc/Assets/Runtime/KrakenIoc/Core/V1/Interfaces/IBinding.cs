@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CometPeak.SerializableKrakenIoc.Interfaces
-{
+namespace CometPeak.SerializableKrakenIoc.Interfaces {
     /// <summary>
     /// Delegate that resolves instance of type T
     /// </summary>
@@ -15,8 +14,7 @@ namespace CometPeak.SerializableKrakenIoc.Interfaces
     /// Represents a binding between an interface
     /// and implementation type.
     /// </summary>
-    public partial interface IBinding
-    {
+    public partial interface IBinding {
         event Action<bool, IBinding, object> Resolved;
 
         IContainer Container { get; set; }
@@ -33,7 +31,7 @@ namespace CometPeak.SerializableKrakenIoc.Interfaces
         /// The lifetime-scope of the binding.
         /// </summary>
         BindingType BindingType { get; set; }
-        
+
         /// <summary>
         /// Array of contracts (interfaces) that this implementation is bound to
         /// </summary>
@@ -90,7 +88,7 @@ namespace CometPeak.SerializableKrakenIoc.Interfaces
         /// <typeparam name="T">Type being resolved</typeparam>
         /// <returns></returns>
         IBinding FromFactory<TFactory, T>() where TFactory : IFactory<T>;
-        
+
         /// <summary>
         /// T will be resolved using Factory Method.
         /// T will be validated a the binding time.

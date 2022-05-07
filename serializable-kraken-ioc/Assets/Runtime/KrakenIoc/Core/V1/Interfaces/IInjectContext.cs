@@ -1,9 +1,7 @@
 ﻿using System;
 
-namespace CometPeak.SerializableKrakenIoc.Interfaces
-{
-    public interface IInjectContext
-    {
+namespace CometPeak.SerializableKrakenIoc.Interfaces {
+    public interface IInjectContext {
         /// <summary>
         /// Container being used for an injection
         /// </summary>

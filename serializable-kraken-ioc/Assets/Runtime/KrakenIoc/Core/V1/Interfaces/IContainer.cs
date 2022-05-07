@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 
-namespace CometPeak.SerializableKrakenIoc.Interfaces
-{
+namespace CometPeak.SerializableKrakenIoc.Interfaces {
     /// <summary>
     /// Contains the IOC bindings that can be
     /// resolved and injected.
     /// </summary>
-    public interface IContainer : IDisposable
-    {
+    public interface IContainer : IDisposable {
         /// <summary>
         /// The injector that this container uses.
         /// </summary>
@@ -87,7 +85,7 @@ namespace CometPeak.SerializableKrakenIoc.Interfaces
         /// <param name="category"></param>
         /// <returns></returns>
         IBinding Bind<T>(T value);
-        
+
         /// <summary>
         /// Binds the interface type T against the implementation
         /// Type.

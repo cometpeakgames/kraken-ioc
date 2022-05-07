@@ -4,37 +4,29 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace CometPeak.SerializableKrakenIoc
-{
-    public class UnityBindingMiddleware : IBindingMiddleware
-    {
-        public object Resolve(IBinding binding, object target = null)
-        {
+namespace CometPeak.SerializableKrakenIoc {
+    public class UnityBindingMiddleware : IBindingMiddleware {
+        public object Resolve(IBinding binding, object target = null) {
             return Resolve(binding, null, target);
         }
 
-        public object Resolve(IBinding binding, IInjectContext injectContext, object target = null)
-        {
-            if (typeof(Component).IsAssignableFrom(binding.BoundType))
-            {
-                return InternalResolveComponent(binding, injectContext, (GameObject)target);
+        public object Resolve(IBinding binding, IInjectContext injectContext, object target = null) {
+            if (typeof(Component).IsAssignableFrom(binding.BoundType)) {
+                return InternalResolveComponent(binding, injectContext, (GameObject) target);
             }
 
             // Default binding resolve will handle....
             return null;
         }
 
-        private object InternalResolveComponent(IBinding binding, IInjectContext injectContext, GameObject gameObject)
-        {
+        private object InternalResolveComponent(IBinding binding, IInjectContext injectContext, GameObject gameObject) {
             object addedComponent;
 
             binding.BoundObjects = binding.BoundObjects ?? new List<object>();
 
-            switch (binding.BindingType)
-            {
+            switch (binding.BindingType) {
                 case BindingType.Singleton:
-                    if (binding.BoundObjects.Count != 0)
-                    {
+                    if (binding.BoundObjects.Count != 0) {
                         binding.NotifyResolved(false, gameObject);
 
                         return binding.BoundObjects.FirstOrDefault();

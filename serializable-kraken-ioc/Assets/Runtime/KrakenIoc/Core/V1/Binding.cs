@@ -4,11 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CometPeak.SerializableKrakenIoc
-{
+namespace CometPeak.SerializableKrakenIoc {
     /// <inheritdoc/>
-    public partial class Binding : IBinding
-    {
+    public partial class Binding : IBinding {
         private static List<IBindingMiddleware> _bindingMiddleware = new List<IBindingMiddleware>();
 
         private IBinding _inheritedFromBinding;
@@ -36,7 +34,7 @@ namespace CometPeak.SerializableKrakenIoc
         /// Bound objects - values to resolve
         /// </summary>
         public List<object> BoundObjects { get; set; }
-        
+
         /// <summary>
         /// Container
         /// </summary>
@@ -58,16 +56,12 @@ namespace CometPeak.SerializableKrakenIoc
         private IFactory _cachedFactory = null;
 
 
-        public object Category
-        {
-            get
-            {
+        public object Category {
+            get {
                 return _category;
             }
-            set
-            {
-                if (_category != null)
-                {
+            set {
+                if (_category != null) {
                     throw new TypeCategoryAlreadyBoundException(BoundType, _category);
                 }
 
@@ -75,25 +69,20 @@ namespace CometPeak.SerializableKrakenIoc
             }
         }
 
-        internal Binding()
-        {
+        internal Binding() {
             BindingType = BindingType.Transient;
             BoundObjects = new List<object>();
         }
 
-        public object ResolveWithMiddleware(object target = null)
-        {
+        public object ResolveWithMiddleware(object target = null) {
             return ResolveWithMiddleware(null, target);
         }
 
-        public object ResolveWithMiddleware(IInjectContext injectContext, object target = null)
-        {
-            foreach(var middleware in _bindingMiddleware)
-            {
+        public object ResolveWithMiddleware(IInjectContext injectContext, object target = null) {
+            foreach (var middleware in _bindingMiddleware) {
                 var result = middleware.Resolve(this, injectContext, target);
 
-                if(result != null)
-                {
+                if (result != null) {
                     return result;
                 }
             }
@@ -101,55 +90,41 @@ namespace CometPeak.SerializableKrakenIoc
             return null;
         }
 
-        public T Resolve<T>(object target = null)
-        {
-            return (T)Resolve(target);
+        public T Resolve<T>(object target = null) {
+            return (T) Resolve(target);
         }
-        
-        public object Resolve(object target = null)
-        {
+
+        public object Resolve(object target = null) {
             return Resolve(null, target);
         }
 
-        public object Resolve(IInjectContext parentContext, object target = null)
-        {
-            if (_inheritedFromBinding != null)
-            {
+        public object Resolve(IInjectContext parentContext, object target = null) {
+            if (_inheritedFromBinding != null) {
                 return _inheritedFromBinding.Resolve(parentContext, target);
             }
-            
+
             // Attempt to resolve with middleware first...
             var result = ResolveWithMiddleware(parentContext, target);
 
-            if (result != null)
-            {
+            if (result != null) {
                 return result;
-            }
-            else
-            {
+            } else {
                 return InternalResolve(parentContext);
             }
         }
 
-        private object ResolveNew(IInjectContext injectContext)
-        {
+        private object ResolveNew(IInjectContext injectContext) {
             object instance;
 
-            if (FactoryMethod != null)
-            {
+            if (FactoryMethod != null) {
                 instance = FactoryMethod?.Invoke(injectContext);
-            }
-            else if(FactoryType != null)
-            {
-                if (_cachedFactory == null)
-                {
-                    _cachedFactory = (IFactory)Container.Resolve(FactoryType);
+            } else if (FactoryType != null) {
+                if (_cachedFactory == null) {
+                    _cachedFactory = (IFactory) Container.Resolve(FactoryType);
                 }
 
                 instance = _cachedFactory.Create(injectContext);
-            }
-            else
-            {
+            } else {
 
                 instance = Container.Injector.Resolve(BoundType, injectContext);
             }
@@ -157,26 +132,21 @@ namespace CometPeak.SerializableKrakenIoc
             return instance;
         }
 
-        private object InternalResolve(IInjectContext injectContext)
-        {
+        private object InternalResolve(IInjectContext injectContext) {
             object instance;
 
             BoundObjects = BoundObjects ?? new List<object>();
 
-            switch (BindingType)
-            {
+            switch (BindingType) {
                 case BindingType.Singleton:
-                    if (BoundObjects.Count == 0)
-                    {
+                    if (BoundObjects.Count == 0) {
                         instance = ResolveNew(injectContext);
                         BoundObjects.Add(instance);
 
                         Container.Injector.Inject(instance, injectContext);
 
                         Resolved?.Invoke(true, this, null);
-                    }
-                    else
-                    {
+                    } else {
                         instance = BoundObjects.FirstOrDefault();
 
                         Resolved?.Invoke(false, this, null);
@@ -198,8 +168,7 @@ namespace CometPeak.SerializableKrakenIoc
         /// <summary>
         /// Sets the lifetime scope of this binding to 'Singleton'.
         /// </summary>
-        public void AsSingleton()
-        {
+        public void AsSingleton() {
             BindingType = BindingType.Singleton;
         }
 
@@ -207,24 +176,19 @@ namespace CometPeak.SerializableKrakenIoc
         /// Sets the lifetime scope of this binding to 'Transient'. Returns
         /// a new instance every time it is resolved.
         /// </summary>
-        public void AsTransient()
-        {
+        public void AsTransient() {
             BindingType = BindingType.Transient;
         }
 
         /// <summary>
         /// Dissolves and removes any bound objects.
         /// </summary>
-        public void Dissolve()
-        {
-            if (BoundObjects != null)
-            {
-                for (int i = BoundObjects.Count - 1; i >= 0; i--)
-                {
+        public void Dissolve() {
+            if (BoundObjects != null) {
+                for (int i = BoundObjects.Count - 1; i >= 0; i--) {
                     IDisposable disposable = BoundObjects[i] as IDisposable;
 
-                    if (disposable != null)
-                    {
+                    if (disposable != null) {
                         disposable.Dispose();
                     }
 
@@ -238,12 +202,9 @@ namespace CometPeak.SerializableKrakenIoc
         /// Assigns the boundType to the specifed type.
         /// </summary>
         /// <typeparam name="T">The concrete implementation type.</typeparam>
-        public IBinding To<T>()
-        {
-            foreach (var interfaceType in BinderTypes)
-            {
-                if (!interfaceType.IsAssignableFrom(typeof(T)))
-                {
+        public IBinding To<T>() {
+            foreach (var interfaceType in BinderTypes) {
+                if (!interfaceType.IsAssignableFrom(typeof(T))) {
                     throw new InvalidBindingException($"Can not bind ${interfaceType} type to type {typeof(T)}, {typeof(T)} does not implement {interfaceType}");
                 }
             }
@@ -253,8 +214,7 @@ namespace CometPeak.SerializableKrakenIoc
             return this;
         }
 
-        public void Inherit(IBinding binding)
-        {
+        public void Inherit(IBinding binding) {
             BinderTypes = binding.BinderTypes;
             BindingType = binding.BindingType;
             BoundType = binding.BoundType;
@@ -266,8 +226,7 @@ namespace CometPeak.SerializableKrakenIoc
             _inheritedFromBinding = binding;
         }
 
-        public void CloneFrom(IBinding binding)
-        {
+        public void CloneFrom(IBinding binding) {
             BinderTypes = binding.BinderTypes;
             BindingType = binding.BindingType;
             BoundType = binding.BoundType;
@@ -276,17 +235,14 @@ namespace CometPeak.SerializableKrakenIoc
             FactoryMethod = binding.FactoryMethod;
         }
 
-        public IBinding WithCategory(object category)
-        {
+        public IBinding WithCategory(object category) {
             Category = category;
 
             return this;
         }
 
-        public IBinding FromFactory<TFactory>() where TFactory : IFactory
-        {
-            if (FactoryMethod != null)
-            {
+        public IBinding FromFactory<TFactory>() where TFactory : IFactory {
+            if (FactoryMethod != null) {
                 throw new InvalidBindingException($"Can not bind with FromFactory, binding already uses FromFactoryMethod");
             }
 
@@ -294,13 +250,10 @@ namespace CometPeak.SerializableKrakenIoc
 
             return this;
         }
-        
-        public IBinding FromFactory<TFactory, T>() where TFactory : IFactory<T>
-        {
-            foreach(var interfaceType in BinderTypes)
-            {
-                if (!interfaceType.IsAssignableFrom(typeof(T)))
-                {
+
+        public IBinding FromFactory<TFactory, T>() where TFactory : IFactory<T> {
+            foreach (var interfaceType in BinderTypes) {
+                if (!interfaceType.IsAssignableFrom(typeof(T))) {
                     throw new InvalidBindingException($"Can not bind ${interfaceType} type to resolve from Factory of type ${typeof(TFactory)}");
                 }
             }
@@ -308,41 +261,33 @@ namespace CometPeak.SerializableKrakenIoc
             return FromFactory<TFactory>();
         }
 
-        public IBinding FromFactoryMethod<T>(FactoryMethod<T> factoryMethod)
-        {
-            foreach (var interfaceType in BinderTypes)
-            {
-                if (!interfaceType.IsAssignableFrom(typeof(T)))
-                {
+        public IBinding FromFactoryMethod<T>(FactoryMethod<T> factoryMethod) {
+            foreach (var interfaceType in BinderTypes) {
+                if (!interfaceType.IsAssignableFrom(typeof(T))) {
                     throw new InvalidBindingException($"Can not bind ${interfaceType} type to resolve from Factory Method of type ${typeof(FactoryMethod<T>)}");
                 }
             }
 
-            if(FactoryType != null)
-            {
+            if (FactoryType != null) {
                 throw new InvalidBindingException($"Can not bind with FromFactoryMethod, binding already uses FromFactory");
             }
 
-            if(factoryMethod == null)
-            {
+            if (factoryMethod == null) {
                 throw new InvalidBindingException($"Can not bind FromFactoryMethod, factoryMethod is null");
             }
 
-            FactoryMethod = delegate (IInjectContext injectionContext)
-            {
+            FactoryMethod = delegate (IInjectContext injectionContext) {
                 return factoryMethod.Invoke(injectionContext);
             };
 
             return this;
         }
 
-        public void NotifyResolved(bool success, object value)
-        {
+        public void NotifyResolved(bool success, object value) {
             Resolved?.Invoke(success, this, value);
         }
 
-        public static void AddBindingMiddleware(IBindingMiddleware bindingMiddleware)
-        {
+        public static void AddBindingMiddleware(IBindingMiddleware bindingMiddleware) {
             _bindingMiddleware.Add(bindingMiddleware);
         }
     }
