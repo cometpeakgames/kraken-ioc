@@ -1,0 +1,18 @@
+{
+    "name": "com.ageoflearning.kraken-ioc",
+    "version": "1.0.0",
+    "displayName": "KrakenIoc",
+    "description": "This is a source code version of KrakenIoc that allows KrakenIoc DI containers to work with Unity inspector as a Unity package.\nKrakenIoc is made by Age of Learning, and is available at https://github.com/AgeOfLearning/kraken-ioc\n\nCheck the changelog for version equivalents between this Unity package and the original pure C# KrakenIoc APIs.",
+    "unity": "2020.3",
+    "keywords": [
+        "c#",
+        "scripting",
+        "programming",
+        "dependency injection"
+    ],
+    "author": {
+        "name": "Carlos DaLomba",
+        "email": "carlos@cometpeakgames.net",
+        "url": "https://github.com/AgeOfLearning"
+    }
+}

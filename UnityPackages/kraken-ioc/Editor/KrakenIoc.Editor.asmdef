@@ -1,0 +1,18 @@
+{
+    "name": "KrakenIoc.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e94591856c89f88448647285cbe4398a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
