@@ -1,3 +1,17 @@
 {
-	"name": "CometPeak.SerializableKrakenIoc"
+    "name": "CometPeak.SerializableKrakenIoc",
+    "rootNamespace": "",
+    "references": [
+        "GUID:191fff5877a31c54b8cbc471ba70ba8e",
+        "GUID:49b49c76ee64f6b41bf28ef951cb0e50"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

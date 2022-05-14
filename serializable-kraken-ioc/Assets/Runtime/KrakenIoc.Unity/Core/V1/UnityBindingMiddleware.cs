@@ -1,10 +1,11 @@
-﻿using CometPeak.SerializableKrakenIoc.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using CometPeak.SerializableKrakenIoc.Interfaces;
 
 namespace CometPeak.SerializableKrakenIoc {
+    [Serializable]
     public class UnityBindingMiddleware : IBindingMiddleware {
         public object Resolve(IBinding binding, object target = null) {
             return Resolve(binding, null, target);

@@ -1,20 +1,27 @@
-using CometPeak.SerializableKrakenIoc;
-using CometPeak.SerializableKrakenIoc.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using CometPeak.ModularReferences;
+using CometPeak.SerializableKrakenIoc.Interfaces;
 
 namespace CometPeak.SerializableKrakenIoc {
     public delegate IContainer GlobalContainerFactoryHandler();
 
-    /// <inheritdoc/>
-    public class Container : IContainer, IDisposable {
-        private Dictionary<Type, BindingCollection> _bindings = new Dictionary<Type, BindingCollection>();
-        private Dictionary<Type, BindingCollection> _clonedBindings = new Dictionary<Type, BindingCollection>();
-        private readonly Dictionary<Type, BindingCollection> _inheritedBindings = new Dictionary<Type, BindingCollection>();
-        private IInjector _injector;
+    /// <inheritdoc cref="IContainer"/>
+    [Serializable]
+    public class Container : IContainer, IDisposable, ISerializationCallbackReceiver {
+        [SerializeField] private SerializableDictionary<SerializableType, BindingCollection> bindings = new Dictionary<SerializableType, BindingCollection>();
+        [SerializeField] private SerializableDictionary<SerializableType, BindingCollection> clonedBindings = new Dictionary<SerializableType, BindingCollection>();
+        [SerializeField] private SerializableDictionary<SerializableType, BindingCollection> inheritedBindings = new Dictionary<SerializableType, BindingCollection>();
+        [SubclassSelector]
+        [SerializeReference] private IInjector injector;
 
+        //private Dictionary<Type, BindingCollection
         public LogHandler LogHandler { get; set; }
+        private Dictionary<SerializableType, BindingCollection> Bindings => bindings;
+        private Dictionary<SerializableType, BindingCollection> ClonedBindings => clonedBindings;
+        private Dictionary<SerializableType, BindingCollection> InheritedBindings => inheritedBindings;
 
         public Container() { }
 
@@ -22,39 +29,42 @@ namespace CometPeak.SerializableKrakenIoc {
             Injector = injector;
         }
 
-        public void Dispose() {
-            // Dispose bindings...
-            var keys = _bindings.Keys;
+        public void OnBeforeSerialize() {
+            Debug.LogWarning(bindings.Dictionary.Count);
+        }
+        public void OnAfterDeserialize() {
+            Debug.LogWarning(bindings.Dictionary.Count);
+        }
 
+        public void Dispose() {
+            var keys = Bindings.Keys;
             for (int i = keys.Count - 1; i >= 0; i--) {
                 var key = keys.ElementAt(i);
                 Dissolve(key);
             }
 
-            // Dispose cloned bindings...
-            var clonedKeys = _clonedBindings.Keys;
-
+            var clonedKeys = ClonedBindings.Keys;
             for (int i = clonedKeys.Count - 1; i >= 0; i--) {
                 var key = clonedKeys.ElementAt(i);
                 Dissolve(key);
             }
 
-            _bindings = null;
-            _clonedBindings = null;
+            bindings = null;
+            clonedBindings = null;
         }
 
         public bool ShouldLog { get; set; }
 
         public IInjector Injector {
             get {
-                if (_injector == null) {
-                    _injector = new Injector(this);
+                if (injector == null) {
+                    injector = new Injector(this);
                 }
 
-                return _injector;
+                return injector;
             }
             set {
-                _injector = value;
+                injector = value;
             }
         }
 
@@ -79,13 +89,11 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         public IBinding Bind<T>(Type type) {
-            if (!typeof(T).IsAssignableFrom(type)) {
+            if (!typeof(T).IsAssignableFrom(type))
                 throw new InvalidBindingException($"Can not bind ${typeof(T)} type to type {type}, {type} does not implement {typeof(T)}");
-            }
 
-            if (!_bindings.ContainsKey(typeof(T))) {
-                _bindings.Add(typeof(T), new BindingCollection());
-            }
+            if (!Bindings.ContainsKey(typeof(T)))
+                Bindings.Add(typeof(T), new BindingCollection());
 
             Binding binding = new Binding {
                 BinderTypes = new Type[] { typeof(T) },
@@ -93,19 +101,17 @@ namespace CometPeak.SerializableKrakenIoc {
                 Container = this
             };
 
-            _bindings[typeof(T)].Add(binding);
+            Bindings[typeof(T)].Add(binding);
 
             return binding;
         }
 
         public IBinding Bind(params Type[] interfaceTypes) {
-            if (interfaceTypes == null) {
+            if (interfaceTypes == null)
                 throw new InvalidBindingException($"Can not bind multiple interfaces, provided array of interface types is null");
-            }
 
-            if (interfaceTypes.Length == 0) {
+            if (interfaceTypes.Length == 0)
                 throw new InvalidBindingException($"Can not bind multiple interfaces, provided array of interface types is empty");
-            }
 
             Binding binding = new Binding {
                 BinderTypes = interfaceTypes,
@@ -114,21 +120,17 @@ namespace CometPeak.SerializableKrakenIoc {
             };
 
             foreach (var interfaceType in interfaceTypes) {
-                if (!_bindings.ContainsKey(interfaceType)) {
-                    _bindings.Add(interfaceType, new BindingCollection());
-                }
-
-                _bindings[interfaceType].Add(binding);
+                if (!Bindings.ContainsKey(interfaceType))
+                    Bindings.Add(interfaceType, new BindingCollection());
+                Bindings[interfaceType].Add(binding);
             }
 
             return binding;
         }
 
         private void LogError(string format, params object[] args) {
-            if (!ShouldLog) {
+            if (!ShouldLog)
                 return;
-            }
-
             LogHandler?.Invoke(format, args);
         }
 
@@ -145,31 +147,22 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         public IBinding GetBinding(Type type, object category) {
-            // Local bindings...
-            if (_bindings.ContainsKey(type)) {
-                IBinding binding = _bindings[type].GetBindingWithCategory(category);
-
-                if (binding != null) {
+            if (Bindings.ContainsKey(type)) {
+                IBinding binding = Bindings[type].GetBindingWithCategory(category);
+                if (binding != null)
                     return binding;
-                }
             }
 
-            // Cloned bindings...
-            if (_clonedBindings.ContainsKey(type)) {
-                IBinding binding = _clonedBindings[type].GetBindingWithCategory(category);
-
-                if (binding != null) {
+            if (ClonedBindings.ContainsKey(type)) {
+                IBinding binding = ClonedBindings[type].GetBindingWithCategory(category);
+                if (binding != null)
                     return binding;
-                }
             }
 
-            // Inherited bindings...
-            if (_inheritedBindings.ContainsKey(type)) {
-                IBinding binding = _inheritedBindings[type].GetBindingWithCategory(category);
-
-                if (binding != null) {
+            if (InheritedBindings.ContainsKey(type)) {
+                IBinding binding = InheritedBindings[type].GetBindingWithCategory(category);
+                if (binding != null)
                     return binding;
-                }
             }
 
             return null;
@@ -178,32 +171,26 @@ namespace CometPeak.SerializableKrakenIoc {
         public List<IBinding> GetBindings() {
             List<IBinding> bindings = new List<IBinding>();
 
-            // Self bindings...
-            for (int i = 0; i < _bindings.Count; i++) {
-                var bindingCollection = _bindings.ElementAt(i).Value;
-
-                bindings.AddRange(bindingCollection.GetBindings());
+            for (int i = 0; i < Bindings.Count; i++) {
+                BindingCollection collection = Bindings.ElementAt(i).Value;
+                bindings.AddRange(collection.GetBindings());
             }
 
-            // Cloned bindings...
-            for (int i = 0; i < _clonedBindings.Count; i++) {
-                var bindingCollection = _clonedBindings.ElementAt(i).Value;
-
-                bindings.AddRange(bindingCollection.GetBindings());
+            for (int i = 0; i < ClonedBindings.Count; i++) {
+                BindingCollection collection = ClonedBindings.ElementAt(i).Value;
+                bindings.AddRange(collection.GetBindings());
             }
 
-            // Inherited bindings...
-            for (int i = 0; i < _inheritedBindings.Count; i++) {
-                var bindingCollection = _inheritedBindings.ElementAt(i).Value;
-
-                bindings.AddRange(bindingCollection.GetBindings());
+            for (int i = 0; i < InheritedBindings.Count; i++) {
+                BindingCollection collection = InheritedBindings.ElementAt(i).Value;
+                bindings.AddRange(collection.GetBindings());
             }
 
             return bindings;
         }
 
         public List<Type> GetBindedTypes() {
-            return _bindings.Keys.ToList();
+            return Bindings.Keys.ToList().Select(s => s.Type).ToList();
         }
 
         /// <summary>
@@ -211,22 +198,16 @@ namespace CometPeak.SerializableKrakenIoc {
         /// </summary>
         /// <param name="type">Type.</param>
         public void Dissolve(Type type) {
-            // Self...
-            if (_bindings.ContainsKey(type)) {
-                var bindingCollection = _bindings[type];
-
-                bindingCollection.Dissolve();
-
-                _bindings.Remove(type);
+            if (Bindings.ContainsKey(type)) {
+                BindingCollection collection = Bindings[type];
+                collection.Dissolve();
+                Bindings.Remove(type);
             }
 
-            // Cloned bindings...
-            if (_clonedBindings.ContainsKey(type)) {
-                var bindingCollection = _clonedBindings[type];
-
-                bindingCollection.Dissolve();
-
-                _clonedBindings.Remove(type);
+            if (ClonedBindings.ContainsKey(type)) {
+                BindingCollection collection = ClonedBindings[type];
+                collection.Dissolve();
+                ClonedBindings.Remove(type);
             }
         }
 
@@ -275,9 +256,29 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         public object ResolveWithCategory(Type type, object category, IInjectContext parentContext) {
-            // Check self-bindings...
-            if (_bindings.ContainsKey(type)) {
-                IBinding binding = _bindings[type].GetBindingWithCategory(category);
+            bindings.OnBeforeSerialize();
+            bindings.OnAfterDeserialize();
+            Debug.Log("Looking for " + (SerializableType) type + " in " + Bindings.Count + " bindings...\n\ncategory = " + category + "parentContext = \n" + parentContext);
+            foreach (SerializableType key in Bindings.Keys) {
+                Debug.Log("KEY " + key.Type.Name + " ====>\n\n" + (key == (SerializableType) type) + " vs. " + key.Equals(type) + " vs. " + key.Equals((SerializableType) type) + " vs. " + key.GetHashCode() + " vs. " + type.GetHashCode());
+                Debug.Log(new Dictionary<Type, BindingCollection>() { { key, null } }.ContainsKey(type));
+            }
+
+            bool success = Bindings.ContainsKey(type);
+            if (Bindings.ContainsKey(type)) {
+                Debug.Log("???");
+                IBinding binding = Bindings[type].GetBindingWithCategory(category);
+
+                Debug.Log("???");
+                if (binding != null) {
+                    return binding.Resolve(parentContext);
+                } else {
+                    throw new MissingBindingException(type, category);
+                }
+            }
+
+            if (ClonedBindings.ContainsKey(type)) {
+                IBinding binding = ClonedBindings[type].GetBindingWithCategory(category);
 
                 if (binding != null) {
                     return binding.Resolve(parentContext);
@@ -286,20 +287,8 @@ namespace CometPeak.SerializableKrakenIoc {
                 }
             }
 
-            // Cloned self-bindings...
-            if (_clonedBindings.ContainsKey(type)) {
-                IBinding binding = _clonedBindings[type].GetBindingWithCategory(category);
-
-                if (binding != null) {
-                    return binding.Resolve(parentContext);
-                } else {
-                    throw new MissingBindingException(type, category);
-                }
-            }
-
-            // Check inherited bindings...
-            if (_inheritedBindings.ContainsKey(type)) {
-                IBinding binding = _inheritedBindings[type].GetBindingWithCategory(category);
+            if (InheritedBindings.ContainsKey(type)) {
+                IBinding binding = InheritedBindings[type].GetBindingWithCategory(category);
 
                 if (binding != null) {
                     return binding.Resolve(parentContext);
@@ -317,9 +306,8 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         public object ResolveWithCategory(Type type, object target, object category, IInjectContext parentContext) {
-            // Check self-bindings...
-            if (_bindings.ContainsKey(type)) {
-                IBinding binding = _bindings[type].GetBindingWithCategory(category);
+            if (Bindings.ContainsKey(type)) {
+                IBinding binding = Bindings[type].GetBindingWithCategory(category);
 
                 if (binding != null) {
                     return binding.Resolve(parentContext, target);
@@ -328,9 +316,8 @@ namespace CometPeak.SerializableKrakenIoc {
                 }
             }
 
-            // Check cloned bindings...
-            if (_clonedBindings.ContainsKey(type)) {
-                IBinding binding = _clonedBindings[type].GetBindingWithCategory(category);
+            if (ClonedBindings.ContainsKey(type)) {
+                IBinding binding = ClonedBindings[type].GetBindingWithCategory(category);
 
                 if (binding != null) {
                     return binding.Resolve(parentContext, target);
@@ -339,9 +326,8 @@ namespace CometPeak.SerializableKrakenIoc {
                 }
             }
 
-            // Check inherited-bindings...
-            if (_inheritedBindings.ContainsKey(type)) {
-                IBinding binding = _inheritedBindings[type].GetBindingWithCategory(category);
+            if (InheritedBindings.ContainsKey(type)) {
+                IBinding binding = InheritedBindings[type].GetBindingWithCategory(category);
 
                 if (binding != null) {
                     return binding.Resolve(parentContext, target);
@@ -358,7 +344,7 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         public bool HasBindingFor(Type type) {
-            return _inheritedBindings.ContainsKey(type) || _clonedBindings.ContainsKey(type) || _bindings.ContainsKey(type);
+            return InheritedBindings.ContainsKey(type) || ClonedBindings.ContainsKey(type) || Bindings.ContainsKey(type);
         }
 
         public bool HasBindingForCategory<T>(object category) {
@@ -366,9 +352,9 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         public bool HasBindingForCategory(Type type, object category) {
-            return (_inheritedBindings.ContainsKey(type) && _inheritedBindings[type].HasCategory(category)) ||
-                (_clonedBindings.ContainsKey(type) && _clonedBindings[type].HasCategory(category)) ||
-                (_bindings.ContainsKey(type) && _bindings[type].HasCategory(category));
+            return (InheritedBindings.ContainsKey(type) && InheritedBindings[type].HasCategory(category)) ||
+                (ClonedBindings.ContainsKey(type) && ClonedBindings[type].HasCategory(category)) ||
+                (Bindings.ContainsKey(type) && Bindings[type].HasCategory(category));
         }
 
         public void Inherit(IContainer container) {
@@ -396,17 +382,16 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         private void AddInheritedBinding(Binding binding) {
-            foreach (var interfaceType in binding.BinderTypes) {
-                if (!_inheritedBindings.ContainsKey(interfaceType)) {
-                    _inheritedBindings.Add(interfaceType, new BindingCollection());
-                }
+            foreach (Type interfaceType in binding.BinderTypes) {
+                if (!InheritedBindings.ContainsKey(interfaceType))
+                    InheritedBindings.Add(interfaceType, new BindingCollection());
 
-                var bindingCollection = _inheritedBindings[interfaceType];
+                BindingCollection collection = InheritedBindings[interfaceType];
 
-                IBinding existingBinding = bindingCollection.GetBindingWithCategory(binding.Category);
+                IBinding existingBinding = collection.GetBindingWithCategory(binding.Category);
 
                 if (existingBinding == null) {
-                    bindingCollection.Add(binding);
+                    collection.Add(binding);
                 } else {
                     if (binding.Category == null) {
                         throw new TypeAlreadyBoundException(interfaceType);
@@ -418,17 +403,16 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         private void AddClonedBinding(Binding binding) {
-            foreach (var interfaceType in binding.BinderTypes) {
-                if (!_clonedBindings.ContainsKey(interfaceType)) {
-                    _clonedBindings.Add(interfaceType, new BindingCollection());
-                }
+            foreach (Type interfaceType in binding.BinderTypes) {
+                if (!ClonedBindings.ContainsKey(interfaceType))
+                    ClonedBindings.Add(interfaceType, new BindingCollection());
 
-                var bindingCollection = _clonedBindings[interfaceType];
+                BindingCollection collection = ClonedBindings[interfaceType];
 
-                IBinding existingBinding = bindingCollection.GetBindingWithCategory(binding.Category);
+                IBinding existingBinding = collection.GetBindingWithCategory(binding.Category);
 
                 if (existingBinding == null) {
-                    bindingCollection.Add(binding);
+                    collection.Add(binding);
                 } else {
                     if (binding.Category == null) {
                         throw new TypeAlreadyBoundException(interfaceType);

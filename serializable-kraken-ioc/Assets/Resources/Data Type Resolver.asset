@@ -1,0 +1,243 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acdc42aa44686db47a74a2fb40d1c228, type: 3}
+  m_Name: Data Type Resolver
+  m_EditorClassIdentifier: 
+  savePlayModeChanges: 0
+  previousData: {fileID: 0}
+  assemblyNames:
+  - UnityEngine
+  logNullTypes: 0
+  assemblies:
+  - asset: {fileID: 5897886265953266890, guid: 1b9dd0f6d9b38ea42985b942d899fb0d, type: 3}
+    json: '{"name":"CometPeak.SerializableKrakenIoc"}'
+  ignoreMissingTypes:
+  - (Unity)|(Editor)
+  resolvedTypes:
+  - assemblyQualifiedName: UnityEditorInternal.Transition, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEditorInternal.StateMachine, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEditorInternal.State, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEditorInternal.AnimatorController, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEditorInternal.BlendTree, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEditorInternal.AnimatorControllerLayer, UnityEngine,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEditorInternal.AnimatorControllerParameter, UnityEngine,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEditorInternal.AnimatorControllerParameterType, UnityEngine,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEditorInternal.AnimatorLayerBlendingMode, UnityEngine,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.BlendWeights, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.LightmappingMode, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneScreenOrientation, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneNetworkReachability, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneGeneration, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneTouchPhase, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneTouch, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneMovieControlMode, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneMovieScalingMode, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneKeyboardType, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneKeyboard, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneAccelerationEvent, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneOrientation, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhoneInput, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iPhone, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iOSActivityIndicatorStyle, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.CalendarIdentifier, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.CalendarUnit, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.LocalNotification, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.RemoteNotification, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.RemoteNotificationType, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.NotificationServices, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ADBannerView, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ADInterstitialAd, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.RPCMode, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ConnectionTesterStatus, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.NetworkConnectionError, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.NetworkDisconnection, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.MasterServerEvent, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.NetworkStateSynchronization, UnityEngine,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.NetworkPeerType, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.NetworkLogLevel, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.NetworkPlayer, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.NetworkViewID, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.NetworkView, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.Network, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.BitStream, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.RPC, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.HostData, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.MasterServer, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.NetworkMessageInfo, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.AnimationInfo, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.MovieTexture, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ProceduralMaterial, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ProceduralProcessorUsage, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ProceduralCacheSize, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ProceduralLoadingBehavior, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ProceduralPropertyType, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ProceduralOutputType, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ProceduralPropertyDescription, UnityEngine,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.ProceduralTexture, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.GUIText, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.GUIElement, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.GUILayer, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.GUITexture, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.Networking.DownloadHandlerMovieTexture, UnityEngine,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.Apple.TV.Remote, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iOS.ADBannerView, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: UnityEngine.iOS.ADInterstitialAd, UnityEngine, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: Microsoft.CodeAnalysis.EmbeddedAttribute, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: System.Runtime.CompilerServices.IsReadOnlyAttribute, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Context, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.IExample, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Example, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.TestSO, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.TestSOEditor, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.UnityBindingMiddleware,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.UnityInjector, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.GameObjectExtensions,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Binding, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.BindingCollection, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.BindingType, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.ConstructorAttribute,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.ConstructorInfoCache,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.GlobalContainerFactoryHandler,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Container, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.InvalidBindingException,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.MissingBindingException,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.TypeAlreadyBoundException,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.TypeCategoryAlreadyBoundException,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Factory`1, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.InjectAttribute, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.InjectContext, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Injector, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.MemberInfoCache, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.MethodInfoCache, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.ParameterInfoCache, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.ActionExtensions, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.IContext, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.IUnityInjector,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.FactoryMethod`1,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.IBinding, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.IBindingMiddleware,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.IBootstrap,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.IContainer,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.IFactory, CometPeak.SerializableKrakenIoc,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.IFactory`1,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.IInjectContext,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.LogHandler,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: CometPeak.SerializableKrakenIoc.Interfaces.IInjector,
+      CometPeak.SerializableKrakenIoc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc64580a26af52047a1d68e53a1f159f, type: 3}
+  m_Name: '#Serivce Locator'
+  m_EditorClassIdentifier: 
+  savePlayModeChanges: 0
+  previousData: {fileID: 0}
+  logResolveWarnings: 1
+  services:
+  - {fileID: 11400000, guid: 29fc46a6ef126974e992a2947cf6d577, type: 2}

@@ -1,39 +1,77 @@
-using CometPeak.SerializableKrakenIoc;
-using CometPeak.SerializableKrakenIoc.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using CometPeak.ModularReferences;
+using CometPeak.SerializableKrakenIoc.Interfaces;
 
 namespace CometPeak.SerializableKrakenIoc {
-    /// <inheritdoc/>
-    public partial class Binding : IBinding {
-        private static List<IBindingMiddleware> _bindingMiddleware = new List<IBindingMiddleware>();
+    /// <inheritdoc cref="IBinding"/>
+    [Serializable]
+    public class Binding : IBinding {
+        [SerializeReference] private static List<IBindingMiddleware> _bindingMiddleware = new List<IBindingMiddleware>();
 
-        private IBinding _inheritedFromBinding;
-        private object _category;
+        [SerializeField] private BindingType bindingType;
+        [SerializeField] private SerializableType[] binderTypes;
+        [SerializeField] private SerializableType boundType;
+        [SerializeReference] private List<object> boundObjects;
+        [SerializeField] private SerializableType factoryType;
+
+        [SubclassSelector]
+        [SerializeReference] private IBinding inheritedFromBinding;
+
+        [SubclassSelector]
+        [SerializeReference] private object category;
+
+        /// <summary>
+        /// Cached factory instance
+        /// </summary>
+        [SubclassSelector]
+        [SerializeReference] private IFactory _cachedFactory = null;
+
+        private Type[] binderTypesCache;
+
 
         public event Action<bool, IBinding, object> Resolved;
 
         /// <summary>
         /// Type of the binding - Transient vs Singleton
         /// </summary>
-        public BindingType BindingType { get; set; }
+        public BindingType BindingType {
+            get { return bindingType; }
+            set { bindingType = value; }
+        }
 
         /// <summary>
         /// Binder (contract/interface) types. 
         /// Array of interfaces bound to one implementation
         /// </summary>
-        public Type[] BinderTypes { get; set; }
+        public Type[] BinderTypes {
+            get {
+                binderTypesCache = (binderTypes == null) ? null : binderTypes.Select(s => s.Type).ToArray();
+                return binderTypesCache;
+            }
+            set {
+                binderTypesCache = value;
+                binderTypes = (binderTypesCache == null) ? null : binderTypesCache.Select(t => new SerializableType(t)).ToArray();
+            }
+        }
 
         /// <summary>
         /// Bound (concrete) type
         /// </summary>
-        public Type BoundType { get; set; }
+        public Type BoundType {
+            get { return boundType; }
+            set { boundType = value; }
+        }
 
         /// <summary>
         /// Bound objects - values to resolve
         /// </summary>
-        public List<object> BoundObjects { get; set; }
+        public List<object> BoundObjects {
+            get { return boundObjects; }
+            set { boundObjects = value; }
+        }
 
         /// <summary>
         /// Container
@@ -43,33 +81,30 @@ namespace CometPeak.SerializableKrakenIoc {
         /// <summary>
         /// Factory type - used when object is created FromFactory
         /// </summary>
-        public Type FactoryType { get; set; }
+        public Type FactoryType {
+            get { return factoryType; }
+            set { factoryType = value; }
+        }
 
         /// <summary>
         /// Factory method delegate - used when object is created FromFactoryMethod
         /// </summary>
         public FactoryMethod<object> FactoryMethod { get; set; }
 
-        /// <summary>
-        /// Cached factory instance
-        /// </summary>
-        private IFactory _cachedFactory = null;
-
-
         public object Category {
             get {
-                return _category;
+                return category;
             }
             set {
-                if (_category != null) {
-                    throw new TypeCategoryAlreadyBoundException(BoundType, _category);
+                if (category != null) {
+                    throw new TypeCategoryAlreadyBoundException(BoundType, category);
                 }
 
-                _category = value;
+                category = value;
             }
         }
 
-        internal Binding() {
+        public Binding() {
             BindingType = BindingType.Transient;
             BoundObjects = new List<object>();
         }
@@ -99,8 +134,8 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         public object Resolve(IInjectContext parentContext, object target = null) {
-            if (_inheritedFromBinding != null) {
-                return _inheritedFromBinding.Resolve(parentContext, target);
+            if (inheritedFromBinding != null) {
+                return inheritedFromBinding.Resolve(parentContext, target);
             }
 
             // Attempt to resolve with middleware first...
@@ -162,6 +197,7 @@ namespace CometPeak.SerializableKrakenIoc {
                     throw new InvalidOperationException();
             }
 
+            Debug.Log("RESOLVED " + instance + " (COUNT = " + BoundObjects.Count + ")");
             return instance;
         }
 
@@ -223,7 +259,7 @@ namespace CometPeak.SerializableKrakenIoc {
             FactoryMethod = binding.FactoryMethod;
 
 
-            _inheritedFromBinding = binding;
+            inheritedFromBinding = binding;
         }
 
         public void CloneFrom(IBinding binding) {
