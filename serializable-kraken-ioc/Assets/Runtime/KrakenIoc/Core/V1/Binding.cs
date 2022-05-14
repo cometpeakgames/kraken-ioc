@@ -1,16 +1,20 @@
-using CometPeak.SerializableKrakenIoc;
-using CometPeak.SerializableKrakenIoc.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CometPeak.SerializableKrakenIoc.Interfaces;
 
 namespace CometPeak.SerializableKrakenIoc {
-    /// <inheritdoc/>
-    public partial class Binding : IBinding {
-        private static List<IBindingMiddleware> _bindingMiddleware = new List<IBindingMiddleware>();
+    /// <inheritdoc cref="IBinding"/>
+    public class Binding : IBinding {
+        private static List<IBindingMiddleware> bindingMiddleware = new List<IBindingMiddleware>();
 
-        private IBinding _inheritedFromBinding;
-        private object _category;
+        private IBinding inheritedFromBinding;
+        private object category;
+
+        /// <summary>
+        /// Cached factory instance
+        /// </summary>
+        private IFactory cachedFactory = null;
 
         public event Action<bool, IBinding, object> Resolved;
 
@@ -50,22 +54,16 @@ namespace CometPeak.SerializableKrakenIoc {
         /// </summary>
         public FactoryMethod<object> FactoryMethod { get; set; }
 
-        /// <summary>
-        /// Cached factory instance
-        /// </summary>
-        private IFactory _cachedFactory = null;
-
-
         public object Category {
             get {
-                return _category;
+                return category;
             }
             set {
-                if (_category != null) {
-                    throw new TypeCategoryAlreadyBoundException(BoundType, _category);
+                if (category != null) {
+                    throw new TypeCategoryAlreadyBoundException(BoundType, category);
                 }
 
-                _category = value;
+                category = value;
             }
         }
 
@@ -79,7 +77,7 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         public object ResolveWithMiddleware(IInjectContext injectContext, object target = null) {
-            foreach (var middleware in _bindingMiddleware) {
+            foreach (var middleware in bindingMiddleware) {
                 var result = middleware.Resolve(this, injectContext, target);
 
                 if (result != null) {
@@ -99,8 +97,8 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         public object Resolve(IInjectContext parentContext, object target = null) {
-            if (_inheritedFromBinding != null) {
-                return _inheritedFromBinding.Resolve(parentContext, target);
+            if (inheritedFromBinding != null) {
+                return inheritedFromBinding.Resolve(parentContext, target);
             }
 
             // Attempt to resolve with middleware first...
@@ -119,11 +117,11 @@ namespace CometPeak.SerializableKrakenIoc {
             if (FactoryMethod != null) {
                 instance = FactoryMethod?.Invoke(injectContext);
             } else if (FactoryType != null) {
-                if (_cachedFactory == null) {
-                    _cachedFactory = (IFactory) Container.Resolve(FactoryType);
+                if (cachedFactory == null) {
+                    cachedFactory = (IFactory) Container.Resolve(FactoryType);
                 }
 
-                instance = _cachedFactory.Create(injectContext);
+                instance = cachedFactory.Create(injectContext);
             } else {
 
                 instance = Container.Injector.Resolve(BoundType, injectContext);
@@ -223,7 +221,7 @@ namespace CometPeak.SerializableKrakenIoc {
             FactoryMethod = binding.FactoryMethod;
 
 
-            _inheritedFromBinding = binding;
+            inheritedFromBinding = binding;
         }
 
         public void CloneFrom(IBinding binding) {
@@ -288,7 +286,7 @@ namespace CometPeak.SerializableKrakenIoc {
         }
 
         public static void AddBindingMiddleware(IBindingMiddleware bindingMiddleware) {
-            _bindingMiddleware.Add(bindingMiddleware);
+            Binding.bindingMiddleware.Add(bindingMiddleware);
         }
     }
 

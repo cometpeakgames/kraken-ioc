@@ -1,8 +1,8 @@
-﻿using CometPeak.SerializableKrakenIoc.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using CometPeak.SerializableKrakenIoc.Interfaces;
 
 namespace CometPeak.SerializableKrakenIoc {
     public class UnityBindingMiddleware : IBindingMiddleware {
